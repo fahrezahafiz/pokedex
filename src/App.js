@@ -36,13 +36,14 @@ function App() {
 
   const Grid = styled.div`
     margin: auto;
-    max-width: 1000px;
+    max-width: 1200px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, 20rem);
+    grid-template-columns: repeat(auto-fit, 18rem);
     justify-content: center;
   `
   const Title = styled.h1`
     text-align: center;
+    font-size: 3rem;
   `
 
   return (

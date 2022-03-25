@@ -5,34 +5,76 @@ import { css } from '@emotion/react'
 function PokeCard(props) {
   const pokemon = props.pokemon
 
+  const darkBlue = '#363B81'
+  const lightBlue = '#5DB9FF'
+
   const Card = styled.div`
+    position: relative;
     overflow: hidden;
     border: 2px solid rgb(220, 220, 220);
-    
     background-color: white;
-    text-align: center;
     border-radius: 1.5rem;
-    padding: 1rem;
-    margin: 0.5rem;
+    margin: 0.6rem;
+    transition: border 0.2s ease;
+    &:hover {
+      cursor: pointer;
+      border: 2px solid ${darkBlue};
+    }
+  `
+  const TextSection = styled.div`
+    display: block;
+    padding: 1.2rem 0.8rem;
+    height: auto;
+    background-color: ${darkBlue};
+    color: white;
   `
 
-  const Paragraph = styled.p`
+  const P = styled.p`
     margin: 0.2rem 0;
     text-transform: capitalize;
   `
 
-  const Title = styled(Paragraph)`
-   color: red;
+  const Type = styled(P)`
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: ${lightBlue};
   `
 
-  // const PokemonImage
+  const Name = styled(P)`
+    font-weight: bold;
+    font-size: 2.1rem;
+  `
+
+  const PokeImage = styled.img`
+    display: block;
+    width: 100%;
+    padding: 3rem 0;
+    margin: auto;
+    height: 10rem;
+    text-align: center;
+    transition: transform 0.4s ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+  `
+
+  const Id = styled(P)`
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    font-weight: bold;
+    font-size: 2rem;
+    color: ${lightBlue};
+  `
 
   return (
     <Card>
-      <Paragraph>{pokemon.type}</Paragraph>
-      <img src={pokemon.image} height="160"></img>
-      <Title>{pokemon.name}</Title>
-      {pokemon.moves.length > 0 && pokemon.moves.map}
+      <Id>#{pokemon.id}</Id>
+      <PokeImage src={pokemon.image}/>
+      <TextSection>
+        <Name>{pokemon.name}</Name>
+        <Type>{pokemon.type}</Type>
+      </TextSection>
     </Card>
   )
 }
