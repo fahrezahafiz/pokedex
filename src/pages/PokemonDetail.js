@@ -5,10 +5,16 @@ import { colors } from '../colors'
 import { Card, Heading, P } from '../components/sharedComponents'
 import { getPokemonById } from '../hooks/useLoadPokemons'
 import { css } from '@emotion/react'
+import Modal from '../components/Modal'
+import { AnimatePresence } from 'framer-motion'
 
 function PokemonDetailPage() {
   const { id } = useParams()
   const [pokemon, setPokemon] = useState({})
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const close = () => setModalOpen(false)
+  const open = () => setModalOpen(true)
 
   useEffect(async () => {
     const currentPokemon = await getPokemonById(id)
@@ -82,28 +88,37 @@ function PokemonDetailPage() {
   `
 
   return (
-    <Background>
-      <Container>
-        <Image src={pokemon.image}/>
+    <>
+      <Background>
+        <Container>
+          <Image src={pokemon.image}/>
 
-        <DetailCard>
-          <Back onClick={() => window.history.back()}>&lt; Back to List</Back>
+          <DetailCard>
+            <Back onClick={() => window.history.back()}>&lt; Back to List</Back>
 
-          <Name>{pokemon.name}</Name>
+            <Name>{pokemon.name}</Name>
 
-          <Subtitle>Type</Subtitle>
-          <Content>{pokemon.type}</Content>
+            <Subtitle>Type</Subtitle>
+            <Content>{pokemon.type}</Content>
 
-          <Subtitle>Moves</Subtitle>
-          {pokemon.moves && pokemon.moves.map((m, idx) => <Content key={idx}>{m}</Content>)}
-        </DetailCard>
+            <Subtitle>Moves</Subtitle>
+            {pokemon.moves && pokemon.moves.map((m, idx) => <Content key={idx}>{m}</Content>)}
+          </DetailCard>
 
-        <CatchButton>
-          Catch!
-        </CatchButton>
-      </Container>
-    </Background>
-    
+          <CatchButton onClick={() => (modalOpen ? close() : open())}>
+            Catch!
+          </CatchButton>
+        </Container>
+      </Background>
+      
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => null}
+      >
+        {modalOpen && <Modal modalOpen={modalOpen} handleClose={close} />}
+      </AnimatePresence>
+    </>
   )
 }
 
