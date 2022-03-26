@@ -1,58 +1,34 @@
-import logo from './logo.svg';
-import { useEffect, useState } from 'react';
-import PokeCard from './PokeCard';
-import styled from '@emotion/styled';
+import { useEffect, useState, useMemo } from 'react';
+import { MyPokemonContext } from './MyPokemonContext';
+import PokemonList from './pages/PokemonList';
+import { PokemonListContext } from './PokemonsContext';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PokemonDetail from './pages/PokemonDetail';
+import MyPokemons from './pages/MyPokemons';
+import useLoadPokemons from './hooks/useLoadPokemons';
+import useLocalStorage from './hooks/useLocalStorage';
 
 function App() {
-  const endpoint = "https://pokeapi.co/api/v2/pokemon"
-  const [pokemons, setPokemons] = useState([])
-  const [morePokemons, setMorePokemons] = useState("")
+  // pokemon provider
+  const [pokemons, setPokemons, loadMorePokemons] = useLoadPokemons()
+  const pokemonListProvider = useMemo(() => ({pokemons, setPokemons, loadMorePokemons}), [pokemons, setPokemons, loadMorePokemons])
 
-  const getPokemonByUrl = async url => {
-    const response = await fetch(url)
-    const data = await response.json()
-    return {
-      "id": data.id,
-      "name": data.name,
-      "image": data.sprites.other.dream_world.front_default,
-      "moves": data.moves.map(m => m.move.name).slice(0, 5),
-      "type": data.types[0].type.name,
-    }
-  }
-
-  useEffect(async () => {
-    const response = await fetch(endpoint)
-    const data = await response.json()
-
-    setMorePokemons(data.next)
-
-    data.results.forEach(async d => {
-      const poke = await getPokemonByUrl(d.url)
-      setPokemons(old => [...old, poke])
-    });
-
-    document.title = "Pokemon List"
-  }, [])
-
-  const Grid = styled.div`
-    margin: auto;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 18rem);
-    justify-content: center;
-  `
-  const Title = styled.h1`
-    text-align: center;
-    font-size: 3rem;
-  `
+  // MyPokemon localStorage and provider
+  const [myPokemons, setMyPokemons] = useLocalStorage("myPokemons", {})
+  const myPokemonsProvider = useMemo(() => ({ myPokemons, setMyPokemons }), [myPokemons, setMyPokemons])
 
   return (
-    <div>
-      <Title>Pokemon List</Title>
-      <Grid>
-        {pokemons.length > 0 && pokemons.map(poke => <PokeCard pokemon={poke}/>)}
-      </Grid>
-    </div>
+    <MyPokemonContext.Provider value={myPokemonsProvider}>
+      <PokemonListContext.Provider value={pokemonListProvider}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<PokemonList />}/>
+            <Route path='/pokemons/:id' element={<PokemonDetail />}/>
+            <Route path='/myPokemons' element={<MyPokemons />}/>
+          </Routes>
+        </BrowserRouter>
+      </PokemonListContext.Provider>
+    </MyPokemonContext.Provider>
   );
 }
 
