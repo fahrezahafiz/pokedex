@@ -2,6 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import Backdrop from './Backdrop'
 import styled from '@emotion/styled'
+import { Heading } from './sharedComponents'
 
 function Modal({handleClose, text}) {
   const Window = styled(motion.div)`
@@ -36,7 +37,7 @@ function Modal({handleClose, text}) {
   }
 
   return (
-    <Backdrop onClick={handleClose}>
+    <Backdrop onClick={() => handleClose(null)}>
       <Window
         onClick={(e) => e.stopPropagation()}
         variants={dropIn}
@@ -44,8 +45,8 @@ function Modal({handleClose, text}) {
         animate="visible"
         exit="exit"
       >
-        <p>{text}</p>
-        <button onClick={handleClose}>Close</button>
+        <Heading>{text}</Heading>
+        <button onClick={() => handleClose("Pororo")}>Close</button>
       </Window>
     </Backdrop>
   )

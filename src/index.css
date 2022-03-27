@@ -3,6 +3,7 @@ body {
   font-family: 'Maven Pro', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #5DB9FF50;
 }
 
 code {

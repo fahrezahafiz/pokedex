@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import PokeCard from '../components/PokeCard'
 import { PokemonListContext } from '../PokemonsContext'
 import styled from '@emotion/styled'
-import { Card, Heading } from '../components/sharedComponents'
+import { Background, Card, Heading } from '../components/sharedComponents'
 import { colors } from '../colors'
 import { Link } from 'react-router-dom'
 
@@ -14,6 +14,7 @@ function PokemonList() {
   }, [])
 
   const PokemonList = styled.div`
+    padding-bottom: 4rem;
     margin: auto;
     max-width: 1200px;
     display: grid;
@@ -48,7 +49,7 @@ function PokemonList() {
   `
 
   return (
-    <div>
+    <>
       <Title>Pokemon List</Title>
       <PokemonList>
         {pokemons.length > 0 && pokemons.map((poke) => <CleanLink to={`/pokemons/${poke.id}`} key={poke.id}>
@@ -58,7 +59,7 @@ function PokemonList() {
           <LoadText>More<br/>Pokemons</LoadText>
         </LoadMoreCard>
       </PokemonList>
-    </div>
+    </>
   )
 }
 

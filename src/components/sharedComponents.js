@@ -1,4 +1,5 @@
 import styled from "@emotion/styled"
+import { colors } from "../colors"
 
 export const Card = styled.div`
   position: relative;
@@ -21,4 +22,11 @@ export const Heading = styled.h1`
   text-align: center;
   font-size: 3rem;
   text-transform: capitalize;
+`
+
+export const Background = styled.div`
+  position: fixed;
+  background-color: ${colors.lightBlue}50;
+  height: 100%;
+  width: 100%;
 `
