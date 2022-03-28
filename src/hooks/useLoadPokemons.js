@@ -33,7 +33,7 @@ const useLoadPokemons = () => {
 
   useEffect(async () => {
     setPokemons([])
-    loadAndTransform(endpoint)
+    await loadAndTransform(endpoint)
   }, [])
 
   const loadMorePokemons = async () => {

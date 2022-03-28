@@ -43,16 +43,15 @@ function PokemonDetail() {
   }
 
   const addPokemon = (nickname) => {
-    let nicknameList = []
-    if (myPokemons[pokemon.id]) {
-      console.log("udah ada")
-      nicknameList = [...myPokemons[pokemon.id], nickname]
+    if (myPokemons.find(p => p.id === pokemon.id && p.nickname === nickname)) {
+      // 
     } else {
-      console.log("belum ada")
-      nicknameList = [nickname]
+      setMyPokemons(old => [...old, {
+        id: pokemon.id,
+        nickname: nickname,
+        key: `${pokemon.id}.${nickname}`
+      }])
     }
-    
-    setMyPokemons(oldPokemons => ({...oldPokemons, [pokemon.id]: nicknameList}))
     
     closeNickModal()
     setCatchState(STATES.IDLE)

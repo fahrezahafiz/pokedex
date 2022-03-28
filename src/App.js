@@ -14,7 +14,7 @@ function App() {
   const pokemonListProvider = useMemo(() => ({pokemons, setPokemons, loadMorePokemons}), [pokemons, setPokemons, loadMorePokemons])
 
   // MyPokemon localStorage and provider
-  const [myPokemons, setMyPokemons] = useLocalStorage("myPokemons", {})
+  const [myPokemons, setMyPokemons] = useLocalStorage("myPokemons", [])
   const myPokemonsProvider = useMemo(() => ({ myPokemons, setMyPokemons }), [myPokemons, setMyPokemons])
 
   return (

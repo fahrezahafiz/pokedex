@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import {Card, P} from './sharedComponents'
 import { colors } from '../colors'
 import { MyPokemonContext } from '../MyPokemonContext'
 
-function PokeCard({pokemon}) {
+function PokeCard({pokemon, nickname}) {
   const {myPokemons, setMyPokemons} = useContext(MyPokemonContext)
 
   const HoverCard = styled(Card)`
@@ -58,11 +58,11 @@ function PokeCard({pokemon}) {
 
   return (
     <HoverCard>
-      <Id>#{pokemon.id}</Id>
+      {/* <Id>#{pokemon.id}</Id> */}
       <PokeImage src={pokemon.image}/>
       <TextSection>
         <Name>{pokemon.name}</Name>
-        <Sub>Owned - {myPokemons[pokemon.id] ? myPokemons[pokemon.id].length : 0}</Sub>
+        {myPokemons && nickname ? <Sub>{nickname}</Sub> : <Sub>Owned - {myPokemons.filter(p => pokemon.id === p.id).length}</Sub>}
       </TextSection>
     </HoverCard>
   )
