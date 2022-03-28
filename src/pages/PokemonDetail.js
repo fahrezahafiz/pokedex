@@ -109,7 +109,7 @@ function PokemonDetail() {
         exitBeforeEnter={true}
         onExitComplete={() => null}
       >
-        {modalOpen && <Modal modalOpen={modalOpen} handleClose={closeNickModal} component={<NicknameModal onSubmit={(name) => addPokemon(name)}/>}/>}
+        {modalOpen && <Modal modalOpen={modalOpen} handleClose={closeNickModal} component={<NicknameModal onSubmit={(name) => addPokemon(name)} pokemon={pokemon}/>}/>}
       </AnimatePresence>
     </>
   )

@@ -1,15 +1,21 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useContext } from 'react'
 import { CardButton, Heading, P } from './sharedComponents'
 import { useState } from 'react'
+import { MyPokemonContext } from '../MyPokemonContext'
 
-function NicknameModal({onSubmit}) {
+function NicknameModal({onSubmit, pokemon}) {
+  const {myPokemons, setMyPokemons} = useContext(MyPokemonContext)
   const [nickname, setNickname] = useState("")
+  const [error, setError] = useState("")
 
   const handleSubmit = e => {
-    if (!nickname || nickname.length == 0) return
     e.preventDefault();
-    console.log(`nickname: ${nickname}`)
+    if (!nickname || nickname.length == 0) return
+    if (myPokemons.find(p => p.id === pokemon.id && p.nickname === nickname)) {
+      setError("Nickname is already taken for this pokemon!")
+      return
+    }
     onSubmit(nickname)
   }
 
@@ -18,6 +24,7 @@ function NicknameModal({onSubmit}) {
       <Title>Nice catch!</Title>
       <Subtitle>Now give your new pokemon a nickname</Subtitle>
         <TextField type="text" placeholder="Nickname" onChange={e => (setNickname(e.target.value))}/>
+        {error.length > 0 && <ErrorMessage>{error}</ErrorMessage>}
         <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
     </>
   )
@@ -43,5 +50,10 @@ const TextField = styled.input`
   text-align: center;
 `
 const SubmitButton = styled(CardButton)``
+
+const ErrorMessage = styled(P)`
+  color: red;
+  text-transform: none;
+`
 
 export default NicknameModal
