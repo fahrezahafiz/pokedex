@@ -5,7 +5,7 @@ import {Card, P} from './sharedComponents'
 import { colors } from '../colors'
 import { MyPokemonContext } from '../MyPokemonContext'
 
-function PokeCard({pokemon, nickname}) {
+function PokeCard({pokemon, nickname, onClick}) {
   const {myPokemons, setMyPokemons} = useContext(MyPokemonContext)
 
   const HoverCard = styled(Card)`
@@ -57,7 +57,7 @@ function PokeCard({pokemon, nickname}) {
   `
 
   return (
-    <HoverCard>
+    <HoverCard onClick={onClick}>
       {/* <Id>#{pokemon.id}</Id> */}
       <PokeImage src={pokemon.image}/>
       <TextSection>
