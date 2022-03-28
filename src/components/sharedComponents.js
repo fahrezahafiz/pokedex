@@ -1,4 +1,6 @@
 import styled from "@emotion/styled"
+import { motion } from "framer-motion"
+import { Link } from "react-router-dom"
 import { colors } from "../colors"
 
 export const Card = styled.div`
@@ -37,4 +39,26 @@ export const CardButton = styled(Card)`
   &:hover {
     cursor: pointer;
   }
+`
+export const CleanLink = styled(Link)`
+  text-decoration: none;
+  &:focus, &:hover, &:visited, &:link, &:active {
+      text-decoration: none;
+  }
+`
+export const ResponsiveGrid = styled.div`
+  padding-bottom: 4rem;
+  margin: auto;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 18rem);
+  justify-content: center;
+`
+export const Title = styled(Heading)`
+  color: ${colors.darkBlue};
+`
+export const ActionButton = styled(CardButton)`
+  margin: 0 auto 2rem auto;
+  width: 16rem;
+  font-size: 1.2rem;
 `
