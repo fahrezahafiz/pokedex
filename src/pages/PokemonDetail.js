@@ -2,35 +2,123 @@ import styled from '@emotion/styled'
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { colors } from '../colors'
-import { Card, Heading, P } from '../components/sharedComponents'
+import { Background, Card, CardButton, Heading, P } from '../components/sharedComponents'
 import { getPokemonById } from '../hooks/useLoadPokemons'
 import { css } from '@emotion/react'
 import Modal from '../components/Modal'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import NicknameModal from '../components/NicknameModal'
+import { MyPokemonContext } from '../MyPokemonContext'
 
-function PokemonDetailPage() {
+const STATES = {
+  IDLE: "idle",
+  CATCHING: "catching",
+  SUCCESS: "success",
+  FAIL: "fail"
+};
+
+function PokemonDetail() {
   const { id } = useParams()
   const [pokemon, setPokemon] = useState({})
   const [modalOpen, setModalOpen] = useState(false)
+  const [catchState, setCatchState] = useState(STATES.IDLE)
+  const {myPokemons, setMyPokemons} = useContext(MyPokemonContext)
 
-  const close = () => setModalOpen(false)
-  const open = () => setModalOpen(true)
+  const closeNickModal = () => setModalOpen(false)
+  const openNickModal = () => setModalOpen(true)
+
+  const tryCatch = async () => {
+    setCatchState(STATES.CATCHING)
+    const caughtProb = Math.random()
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    console.log(`probability: ${caughtProb}`)
+
+    if (caughtProb >= 0.5) {
+      setCatchState(STATES.SUCCESS)
+      openNickModal()
+    } else {
+      setCatchState(STATES.FAIL)
+    }
+  }
+
+  const addPokemon = (nickname) => {
+    let nicknameList = []
+    if (myPokemons[pokemon.id]) {
+      console.log("udah ada")
+      nicknameList = [...myPokemons[pokemon.id], nickname]
+    } else {
+      console.log("belum ada")
+      nicknameList = [nickname]
+    }
+    
+    setMyPokemons(oldPokemons => ({...oldPokemons, [pokemon.id]: nicknameList}))
+    
+    closeNickModal()
+    setCatchState(STATES.IDLE)
+
+    console.log(myPokemons)
+  }
+
+  const getStateMessage = () => {
+    switch (catchState) {
+      case STATES.FAIL:
+        return "Oh snap, you missed! Try it again"
+      default:
+        return "";
+    }
+  }
 
   useEffect(async () => {
     const currentPokemon = await getPokemonById(id)
     setPokemon(currentPokemon)
 
-    document.title = `Pokemon - ${pokemon.name}`
-  }, [])
+    document.title = `${(currentPokemon.name).charAt(0).toUpperCase() + (currentPokemon.name).slice(1)}`
+  }, [id])
 
-  const Background = styled.div`
-    background-color: ${colors.lightBlue}50;
-    height: 100vh;
-  `
-  const Container = styled.div`
-    max-width: 500px;
+  return (
+    <>
+      <Container>
+        <Image src={pokemon.image}/>
+
+        <DetailCard>
+          <Back onClick={() => window.history.back()}>&lt; Back to List</Back>
+
+          <Name>{pokemon.name}</Name>
+
+          <Subtitle>Type</Subtitle>
+          <Content>{pokemon.type}</Content>
+
+          <Subtitle>Moves</Subtitle>
+          {pokemon.moves && pokemon.moves.map((m, idx) => <Content key={idx}>{m}</Content>)}
+
+          <Subtitle>{getStateMessage()}</Subtitle>
+        </DetailCard>
+
+        <motion.div
+          whileHover={{scale: 1.05}}
+          whileTap={{scale: .95}}
+        >
+          <CardButton onClick={tryCatch}>
+            {catchState == STATES.CATCHING ? "Catching..." : "Catch!"}
+          </CardButton>
+        </motion.div>
+      </Container>
+      
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => null}
+      >
+        {modalOpen && <Modal modalOpen={modalOpen} handleClose={closeNickModal} component={<NicknameModal onSubmit={(name) => addPokemon(name)}/>}/>}
+      </AnimatePresence>
+    </>
+  )
+}
+
+const Container = styled.div`
+    width: clamp(30%, 500px, 90%);
     margin: auto;
-    padding: 0 50px;
   `
   const DetailCard = styled(Card)`
     color: black;
@@ -68,58 +156,8 @@ function PokemonDetailPage() {
   `
   const Content = styled(P)`
     font-weight: bold;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     color: rgb(30, 30, 30);
   `
-  const CatchButton = styled(Card)`
-    margin: 1rem 0 0 0;
-    padding: 1.2rem;
-    border: none;
-    color: white;
-    text-align: center;
-    font-size: 1.4rem;
-    background-color: ${colors.darkBlue};
-    user-select: none;
-    font-weight: 500;
-    &:hover {
-      cursor: pointer;
-      font-size: 1.6rem;
-    }
-  `
 
-  return (
-    <>
-      <Background>
-        <Container>
-          <Image src={pokemon.image}/>
-
-          <DetailCard>
-            <Back onClick={() => window.history.back()}>&lt; Back to List</Back>
-
-            <Name>{pokemon.name}</Name>
-
-            <Subtitle>Type</Subtitle>
-            <Content>{pokemon.type}</Content>
-
-            <Subtitle>Moves</Subtitle>
-            {pokemon.moves && pokemon.moves.map((m, idx) => <Content key={idx}>{m}</Content>)}
-          </DetailCard>
-
-          <CatchButton onClick={() => (modalOpen ? close() : open())}>
-            Catch!
-          </CatchButton>
-        </Container>
-      </Background>
-      
-      <AnimatePresence
-        initial={false}
-        exitBeforeEnter={true}
-        onExitComplete={() => null}
-      >
-        {modalOpen && <Modal modalOpen={modalOpen} handleClose={close} />}
-      </AnimatePresence>
-    </>
-  )
-}
-
-export default PokemonDetailPage
+export default PokemonDetail

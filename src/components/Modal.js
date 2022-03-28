@@ -4,13 +4,12 @@ import Backdrop from './Backdrop'
 import styled from '@emotion/styled'
 import { Heading } from './sharedComponents'
 
-function Modal({handleClose, text}) {
+function Modal({handleClose, component}) {
   const Window = styled(motion.div)`
-    width: clamp(20%, 500px, 70%);
-    height: min(50%, 300px);
+    width: clamp(30%, 500px, 80%);
     background-color: white;
     margin: auto;
-    padding: 0 2rem;
+    padding: 2rem;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -45,8 +44,7 @@ function Modal({handleClose, text}) {
         animate="visible"
         exit="exit"
       >
-        <Heading>{text}</Heading>
-        <button onClick={() => handleClose("Pororo")}>Close</button>
+        {component}
       </Window>
     </Backdrop>
   )

@@ -8,20 +8,6 @@ import { MyPokemonContext } from '../MyPokemonContext'
 function PokeCard({pokemon}) {
   const {myPokemons, setMyPokemons} = useContext(MyPokemonContext)
 
-  const addPokemon = () => {
-    let nicknameList = []
-    if (myPokemons[pokemon.id]) {
-      console.log("udah ada")
-      nicknameList = [...myPokemons[pokemon.id], "nickame"]
-    } else {
-      console.log("belum ada")
-      nicknameList = ["nickname"]
-    }
-    
-    setMyPokemons(oldPokemons => ({...oldPokemons, [pokemon.id]: nicknameList}))
-    console.log(myPokemons)
-  }
-
   const HoverCard = styled(Card)`
     &:hover {
       cursor: pointer;

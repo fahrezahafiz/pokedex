@@ -24,9 +24,17 @@ export const Heading = styled.h1`
   text-transform: capitalize;
 `
 
-export const Background = styled.div`
-  position: fixed;
-  background-color: ${colors.lightBlue}50;
-  height: 100%;
-  width: 100%;
+export const CardButton = styled(Card)`
+  margin: 1rem 0 0 0;
+  padding: 1.2rem;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 1.4rem;
+  background-color: ${colors.darkBlue};
+  user-select: none;
+  font-weight: 500;
+  &:hover {
+    cursor: pointer;
+  }
 `
